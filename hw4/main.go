@@ -20,11 +20,13 @@ func (h *UploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
+
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
 		http.Error(w, "Unable to read file", http.StatusBadRequest)
 		return
 	}
+
 	filePath := h.UploadDir + "/" + header.Filename
 	err = ioutil.WriteFile(filePath, data, 0777)
 	if err != nil {
@@ -42,6 +44,18 @@ func main() {
 	}
 
 	http.Handle("/upload", uploadHandler)
+	http.HandleFunc("/files", func(w http.ResponseWriter, r *http.Request) {
+		files, err := ioutil.ReadDir("upload")
+		if err != nil {
+			http.Error(w, "Unable to read files", http.StatusBadRequest)
+			return
+		}
+
+		for _, file := range files {
+			fmt.Println(file.Name(), file.IsDir())
+		}
+	})
+
 	dirToServe := http.Dir(uploadHandler.UploadDir)
 	fs := &http.Server{
 		Addr:         ":8080",
