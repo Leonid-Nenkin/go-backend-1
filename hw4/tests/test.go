@@ -87,33 +87,6 @@ func TestGetHandler(t *testing.T) {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
 	}
-
-	// err = ioutil.WriteFile(fileName, data, 0777)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	http.Error(w, "Unable to save file", http.StatusInternalServerError)
-	// 	return
-	// }
-	// fileLink := h.HostAddr + "/" + header.Filename
-	// req, err := http.NewRequest(http.MethodHead, fileLink, nil)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	http.Error(w, "Unable to check file", http.StatusInternalServerError)
-	// 	return
-	// }
-	// cli := &http.Client{}
-	// resp, err := cli.Do(req)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	http.Error(w, "Unable to check file", http.StatusInternalServerError)
-	// 	return
-	// }
-	// if resp.StatusCode != http.StatusOK {
-	// 	log.Println(err)
-	// 	http.Error(w, "Unable to save file", http.StatusInternalServerError)
-	// 	return
-	// }
-	// fmt.Fprintln(w, fileLink)
 }
 
 func TestUploadHandler(t *testing.T) {
