@@ -1,0 +1,121 @@
+openapi: "3.0.0"
+
+info:
+ title: Simple service API
+ description: REST API
+ version: "1.0.0"
+
+servers:
+ - url: /
+
+paths:
+  /create:
+    post:
+      summary: Create user
+      description: Create user
+      requestBody:
+        description: json body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUser'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiUser'
+        400:
+          description: bad request
+        500:
+          description: internal server error
+
+  /read/{id}:
+    get:
+      summary: Get user
+      description: Get user
+      parameters:
+       - name: id
+         description: id user
+         in: path
+         required: true
+         schema:
+           type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiUser'
+        400:
+          description: bad request
+        500:
+          description: internal server error
+
+  /delete/{id}:
+    delete:
+      summary: Delete user
+      description: Delete user
+      parameters:
+       - name: id
+         description: id user
+         in: path
+         required: true
+         schema:
+           type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiUser'
+        400:
+          description: bad request
+        500:
+          description: internal server error     
+
+  /search/{q}:
+    get:
+      summary: Search user
+      description: Search user
+      operationId: findUsers
+      parameters:
+        - name: q
+          in: path
+          description: user name from begin
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiUser'
+        400:
+          description: bad request
+        500:
+          description: internal server error
+
+components:
+  schemas:
+    ApiUser:
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        data: 
+          type: string
+        perms:
+          type: integer

@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+
+  registry:
+    image: registry:2
+    container_name: registry
+    ports:
+      - 5000:5000
+    restart: always
+    networks:
+      - regusernet
+
+  postgres:
+    image: postgres:12
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      # - /opt/databases/reguser_postgres_ls8:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 1110
+      POSTGRES_DB: test
+    networks:
+      - regusernet
+
+  reguser:
+    image: 127.0.0.1:5000/reguser:latest
+    container_name: reguser
+    build: .
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      PG_DSN: "postgres://postgres:1110@postgres/test?sslmode=disable"
+      # REGUSER_STORE: pg
+    depends_on:
+      - registry
+      - postgres
+    networks:
+      - regusernet
+
+networks:
+  regusernet:
